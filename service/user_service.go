@@ -33,8 +33,10 @@ func (uS UserService) CreateUser(ctx context.Context, user dto.UserRegDto) error
 	// Create user here
 	// convert user dto to user model
 	err = uS.userRepo.CreateUser(ctx, &model.User{
-		Username: user.Username,
-		Password: user.Password,
+		Username:   user.Username,
+		Password:   user.Password,
+		GenreScore: map[string]int{},
+		Genre:      []string{},
 	})
 	if err != nil {
 		log.Println(err)
@@ -49,4 +51,14 @@ func (uS UserService) LoginUser(ctx context.Context, user dto.UserRegDto) error 
 	err := uS.userRepo.CheckIfUserWithNameAndPasswordExists(ctx, user)
 
 	return err
+}
+
+func (uS UserService) AddGenre(ctx context.Context, genre, username string) error {
+	log.Println(username)
+	err := uS.userRepo.AddGenre(ctx, username, genre)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }

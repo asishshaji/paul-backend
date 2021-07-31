@@ -80,3 +80,20 @@ func (uC UserController) LoginUser(ctx echo.Context) error {
 	})
 
 }
+
+func (uC UserController) AddGenre(c echo.Context) error {
+	genre := c.FormValue("genre")
+
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims) // claims
+	username := claims["username"].(string)
+
+	err := uC.userService.AddGenre(c.Request().Context(), genre, username)
+
+	if err != nil {
+		log.Println(err)
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusOK, "success")
+}

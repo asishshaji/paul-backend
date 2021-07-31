@@ -44,7 +44,6 @@ func (controller QuizController) SaveScore(c echo.Context) error {
 
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims) // claims
-	log.Println(claims)
 
 	username := claims["username"].(string)
 
@@ -54,5 +53,5 @@ func (controller QuizController) SaveScore(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{username: score})
+	return c.JSON(http.StatusOK, map[string]string{genre: score})
 }

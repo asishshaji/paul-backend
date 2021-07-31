@@ -13,5 +13,5 @@ type IUserRepository interface {
 	CheckIfUserWithNameAndPasswordExists(ctx context.Context, user dto.UserRegDto) error
 
 	UpdateUserGenreScore(ctx context.Context, username, genre string, score int) error
-	// FindAll() ([]entity.User, error)
+	AddGenre(ctx context.Context, username, genre string) error
 }

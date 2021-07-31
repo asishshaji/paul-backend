@@ -21,6 +21,8 @@ func NewApp(port string, userController controller.IUserController, quizControll
 	uG := e.Group("/user")
 	uG.POST("/", userController.CreateUser)
 	uG.POST("/authenticate", userController.LoginUser)
+	uG.Use(middleware.JWT([]byte("secret")))
+	uG.POST("/genre", userController.AddGenre)
 
 	qG := e.Group("/quiz")
 	qG.Use(middleware.JWT([]byte("secret")))

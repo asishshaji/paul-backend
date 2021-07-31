@@ -8,4 +8,5 @@ import (
 type IUserService interface {
 	CreateUser(ctx context.Context, user dto.UserRegDto) error
 	LoginUser(ctx context.Context, user dto.UserRegDto) error
+	AddGenre(ctx context.Context, genre, username string) error
 }

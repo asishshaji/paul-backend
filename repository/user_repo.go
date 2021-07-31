@@ -9,6 +9,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type UserRepository struct {
@@ -56,11 +57,25 @@ func (uR *UserRepository) CheckIfUserWithNameAndPasswordExists(ctx context.Conte
 
 func (uR *UserRepository) UpdateUserGenreScore(ctx context.Context, username, genre string, score int) error {
 	res := uR.userCollection.FindOneAndUpdate(ctx, bson.M{"username": username},
-		bson.M{"$set": bson.M{"genre." + genre: score}})
+		bson.M{"$set": bson.M{"genrescores." + genre: score}})
 
 	if res.Err() == mongo.ErrNoDocuments {
 		return errors.New("No user found")
 	}
 
+	return nil
+}
+func (uR *UserRepository) AddGenre(ctx context.Context, username, genre string) error {
+
+	opts := options.FindOneAndUpdateOptions{}
+	opts.SetUpsert(true)
+
+	// addToSet : adds to array if not exists
+	res := uR.userCollection.FindOneAndUpdate(ctx, bson.M{"username": username},
+		bson.M{"$addToSet": bson.M{"genre": genre}}, &opts)
+
+	if res.Err() == mongo.ErrNoDocuments {
+		return errors.New("no user found")
+	}
 	return nil
 }
