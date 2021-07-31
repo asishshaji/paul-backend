@@ -2,14 +2,17 @@ package service
 
 import (
 	"backend/model"
+	"backend/repository"
 	"context"
 )
 
 type QuizService struct {
+	userRepo repository.IUserRepository
 }
 
-func NewQuizService() IQuizService {
-	return &QuizService{}
+func NewQuizService(
+	userRepo repository.IUserRepository) IQuizService {
+	return &QuizService{userRepo: userRepo}
 }
 
 var QuizQuestions = []model.Quiz{
@@ -36,4 +39,9 @@ var QuizQuestions = []model.Quiz{
 func (qS QuizService) GetQuizBasedOnGenre(ctx context.Context, genre string) []model.Quiz {
 
 	return QuizQuestions
+}
+
+func (qS QuizService) SaveScore(ctx context.Context, score int, username, genre string) error {
+	err := qS.userRepo.UpdateUserGenreScore(ctx, username, genre, score)
+	return err
 }

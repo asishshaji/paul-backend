@@ -53,3 +53,14 @@ func (uR *UserRepository) CheckIfUserWithNameAndPasswordExists(ctx context.Conte
 	return nil
 
 }
+
+func (uR *UserRepository) UpdateUserGenreScore(ctx context.Context, username, genre string, score int) error {
+	res := uR.userCollection.FindOneAndUpdate(ctx, bson.M{"username": username},
+		bson.M{"$set": bson.M{"genre." + genre: score}})
+
+	if res.Err() == mongo.ErrNoDocuments {
+		return errors.New("No user found")
+	}
+
+	return nil
+}

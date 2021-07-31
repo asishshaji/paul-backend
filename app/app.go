@@ -25,6 +25,7 @@ func NewApp(port string, userController controller.IUserController, quizControll
 	qG := e.Group("/quiz")
 	qG.Use(middleware.JWT([]byte("secret")))
 	qG.GET("/start", quizController.StartQuiz)
+	qG.POST("/", quizController.SaveScore)
 
 	return &App{
 		e:    e,

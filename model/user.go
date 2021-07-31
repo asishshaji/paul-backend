@@ -7,6 +7,6 @@ type User struct {
 	Password            string              `bson:"password"`
 	Genre               []Genre             `bson:"genre"`
 	JoinedDateTimestamp primitive.Timestamp `bson:"joinedOn"`
-	GenreScore          []string            `bson:"scores"`
+	GenreScore          map[string]int      `bson:"scores"`
 	Posts               []Post              `bson:"posts"`
 }
