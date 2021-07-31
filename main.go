@@ -18,6 +18,9 @@ func main() {
 	userService := service.NewUserService(userRepo)
 	userController := controller.NewUserController(userService)
 
-	app := app.NewApp(":9091", userController)
+	quizService := service.NewQuizService()
+	quizController := controller.NewQuizController(quizService)
+
+	app := app.NewApp(":9091", userController, quizController)
 	app.RunServer()
 }

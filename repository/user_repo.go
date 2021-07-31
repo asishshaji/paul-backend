@@ -1,8 +1,10 @@
 package repository
 
 import (
-	"backend/entity"
+	"backend/dto"
+	"backend/model"
 	"context"
+	"errors"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,7 +21,7 @@ func NewUserRepository(db *mongo.Database, userCollectionPath string) IUserRepos
 	}
 }
 
-func (uR *UserRepository) CreateUser(ctx context.Context, user *entity.User) error {
+func (uR *UserRepository) CreateUser(ctx context.Context, user *model.User) error {
 	res, err := uR.userCollection.InsertOne(ctx, user)
 
 	if err != nil {
@@ -34,5 +36,20 @@ func (uR *UserRepository) CheckIfUserWithUsernameExists(ctx context.Context, use
 	return uR.userCollection.FindOne(ctx, bson.M{
 		"username": username,
 	}).Err()
+
+}
+
+func (uR *UserRepository) CheckIfUserWithNameAndPasswordExists(ctx context.Context, user dto.UserRegDto) error {
+	filter := bson.M{
+		"username": user.Username,
+		"password": user.Password,
+	}
+	res := uR.userCollection.FindOne(ctx, filter)
+
+	if res.Err() == mongo.ErrNoDocuments {
+		return errors.New("invalid credentials")
+	}
+
+	return nil
 
 }

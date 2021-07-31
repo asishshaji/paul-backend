@@ -2,7 +2,7 @@ package service
 
 import (
 	"backend/dto"
-	"backend/entity"
+	"backend/model"
 	"backend/repository"
 	"context"
 	"log"
@@ -31,8 +31,8 @@ func (uS UserService) CreateUser(ctx context.Context, user dto.UserRegDto) error
 	}
 
 	// Create user here
-	// convert user dto to user entity
-	err = uS.userRepo.CreateUser(ctx, &entity.User{
+	// convert user dto to user model
+	err = uS.userRepo.CreateUser(ctx, &model.User{
 		Username: user.Username,
 		Password: user.Password,
 	})
@@ -44,6 +44,9 @@ func (uS UserService) CreateUser(ctx context.Context, user dto.UserRegDto) error
 	return nil
 }
 
-func (uS UserService) LoginUser(ctx context.Context, username, password string) error {
-	return nil
+func (uS UserService) LoginUser(ctx context.Context, user dto.UserRegDto) error {
+
+	err := uS.userRepo.CheckIfUserWithNameAndPasswordExists(ctx, user)
+
+	return err
 }

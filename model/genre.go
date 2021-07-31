@@ -1,4 +1,4 @@
-package entity
+package model
 
 type Genre struct {
 	GenreId   string

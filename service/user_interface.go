@@ -7,5 +7,5 @@ import (
 
 type IUserService interface {
 	CreateUser(ctx context.Context, user dto.UserRegDto) error
-	LoginUser(ctx context.Context, username, password string) error
+	LoginUser(ctx context.Context, user dto.UserRegDto) error
 }

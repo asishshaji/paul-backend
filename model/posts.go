@@ -1,4 +1,4 @@
-package entity
+package model
 
 type Post struct {
 	PostId           string

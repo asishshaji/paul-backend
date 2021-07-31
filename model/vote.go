@@ -1,4 +1,4 @@
-package entity
+package model
 
 type Vote struct {
 	VoteId    string

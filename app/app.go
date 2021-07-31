@@ -12,7 +12,7 @@ type App struct {
 	port string
 }
 
-func NewApp(port string, userController controller.IUserController) *App {
+func NewApp(port string, userController controller.IUserController, quizController controller.IQuizController) *App {
 	e := echo.New()
 
 	e.Use(middleware.Logger())
@@ -20,6 +20,11 @@ func NewApp(port string, userController controller.IUserController) *App {
 
 	uG := e.Group("/user")
 	uG.POST("/", userController.CreateUser)
+	uG.POST("/authenticate", userController.LoginUser)
+
+	qG := e.Group("/quiz")
+	qG.Use(middleware.JWT([]byte("secret")))
+	qG.GET("/start", quizController.StartQuiz)
 
 	return &App{
 		e:    e,
