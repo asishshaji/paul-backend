@@ -21,29 +21,29 @@ func NewUserService(uR repository.IUserRepository) IUserService {
 	}
 }
 
-func (uS UserService) CreateUser(ctx context.Context, user dto.UserRegDto) error {
+func (uS UserService) CreateUser(ctx context.Context, user dto.UserRegDto) (model.User, error) {
 
 	// Check if the user with username exists
 	err := uS.userRepo.CheckIfUserWithUsernameExists(ctx, user.Username)
 	if err != mongo.ErrNoDocuments {
 		log.Println(err)
-		return errors.New("User already exists")
+		return model.User{}, errors.New("User already exists")
 	}
 
-	// Create user here
-	// convert user dto to user model
-	err = uS.userRepo.CreateUser(ctx, &model.User{
+	us := &model.User{
 		Username:   user.Username,
 		Password:   user.Password,
 		GenreScore: map[string]int{},
 		Genre:      []string{},
-	})
-	if err != nil {
-		log.Println(err)
-		return errors.New("Error creating user")
 	}
 
-	return nil
+	err = uS.userRepo.CreateUser(ctx, us)
+	if err != nil {
+		log.Println(err)
+		return model.User{}, errors.New("Error creating user")
+	}
+
+	return *us, nil
 }
 
 func (uS UserService) LoginUser(ctx context.Context, user dto.UserRegDto) error {

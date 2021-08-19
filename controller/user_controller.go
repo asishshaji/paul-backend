@@ -33,13 +33,13 @@ func (uC UserController) CreateUser(ctx echo.Context) error {
 		Password: userReq.Password,
 	}
 
-	err := uC.userService.CreateUser(ctx.Request().Context(), user)
+	usr, err := uC.userService.CreateUser(ctx.Request().Context(), user)
 	if err != nil {
 		log.Println(err)
 		return ctx.JSON(http.StatusInternalServerError, "User already exists")
 	}
 
-	return ctx.JSON(http.StatusOK, "Created user successfully")
+	return ctx.JSON(http.StatusOK, usr)
 }
 
 func (uC UserController) LoginUser(ctx echo.Context) error {

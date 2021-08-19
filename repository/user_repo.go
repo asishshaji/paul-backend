@@ -60,7 +60,7 @@ func (uR *UserRepository) UpdateUserGenreScore(ctx context.Context, username, ge
 		bson.M{"$set": bson.M{"genrescores." + genre: score}})
 
 	if res.Err() == mongo.ErrNoDocuments {
-		return errors.New("No user found")
+		return errors.New("no user found")
 	}
 
 	return nil
